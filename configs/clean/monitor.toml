@@ -1,0 +1,34 @@
+# position is derived from index -- run `monitor.sh sync` after editing index.
+
+[undocked.builtin]
+port               = "eDP-1"
+primary            = true
+index              = 0
+position           = "0x0"
+resolution         = "1920x1080"
+resolution_ceiling = "1920x1080"
+refresh-rate       = 144
+orientation        = 0
+wallpaper          = "~/media/wallpapers/horizontal/example.png"
+
+[docked.main-external]
+port               = "HDMI-A-1"
+primary            = true
+index              = 1
+position           = "1080x0"
+resolution         = "2560x1440"
+resolution_ceiling = "3840x2160"
+refresh-rate       = 144
+orientation        = 0
+wallpaper          = "~/media/wallpapers/horizontal/example.png"
+
+[docked.secondary-external]
+port               = "DP-1"
+primary            = false
+index              = 0
+position           = "0x0"
+resolution         = "1920x1080"
+resolution_ceiling = "1920x1080"
+refresh-rate       = 60
+orientation        = 3
+wallpaper          = "~/media/wallpapers/vertical/example2.png"
