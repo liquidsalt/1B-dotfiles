@@ -19,8 +19,22 @@
   # Keyring
   services.gnome.gnome-keyring.enable = true;   # helium seals its cookies with a key in here
 
+  # Shell
+  systemd.user.services.quickshell = {
+    description = "Quickshell";
+    partOf      = [ "graphical-session.target" ];
+    after       = [ "graphical-session.target" ];
+    wantedBy    = [ "graphical-session.target" ];
+    serviceConfig = {
+      ExecStart  = "${pkgs.quickshell}/bin/quickshell";
+      Restart    = "on-failure";
+      RestartSec = 3;
+    };
+  };
+
   # Packages
   environment.systemPackages = with pkgs; [
+    quickshell         # the bar, launcher, osds and menus
     hyprpolkitagent    # polkit agent
     grim               # screenshot capture
     slurp              # region selection
