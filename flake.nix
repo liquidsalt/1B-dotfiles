@@ -23,8 +23,9 @@
     in {
       # disko looks here first; without it the installer relies on the
       # fallback into nixosConfigurations.<host>.config.disko.devices.
-      diskoConfigurations."1B" =
-        (import ./nixos/modules/partition.nix { }).disko.devices;
+      # The whole module, not its .disko.devices: disko reads cfg.disko.devices
+      # off what it finds here.
+      diskoConfigurations."1B" = import ./nixos/modules/partition.nix { };
 
       nixosConfigurations.installer = nixpkgs.lib.nixosSystem {
         inherit system;
