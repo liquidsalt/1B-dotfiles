@@ -16,6 +16,9 @@
   # Lockscreen
   programs.hyprlock.enable = true;
 
+  # Keyring
+  services.gnome.gnome-keyring.enable = true;   # helium seals its cookies with a key in here
+
   # Packages
   environment.systemPackages = with pkgs; [
     hyprpolkitagent    # polkit agent

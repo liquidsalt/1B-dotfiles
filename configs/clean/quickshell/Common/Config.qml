@@ -291,7 +291,9 @@ Singleton {
         path("path.monitor-transforms", "~/.local/state/monitor-transforms")
 
     // ── power sources ───────────────────────────────────────────────────────
-    readonly property var powerSources: []
+    readonly property var powerSources: [
+        { name: "headset", label: "HS", argv: [home + "/.config/scripts/headset.py"] }
+    ]
 
     // ── commands ────────────────────────────────────────────────────────────
 

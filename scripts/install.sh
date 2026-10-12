@@ -15,6 +15,12 @@ die() { printf '\n✗ %s\n' "$*" >&2; exit 1; }
 
 [ "$(id -u)" = 0 ] || die "run as root"
 
+miss=
+for c in disko nixos-install nixos-enter chpasswd tailscale jq curl age zstd tar script git lsblk mountpoint grep sort mktemp; do
+    command -v "$c" >/dev/null 2>&1 || miss="$miss $c"
+done
+[ -z "$miss" ] || die "missing:$miss"
+
 # Disk
 say "target disk"
 lsblk -dno NAME,MODEL,SIZE "$disk" || die "$disk not found"

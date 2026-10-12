@@ -2,6 +2,15 @@
 # dependencies: awww, mpvpaper, jq
 set -euo pipefail
 
+# Fail loudly on a missing dependency rather than halfway through.
+need() {
+    local miss=
+    for c in "$@"; do command -v "$c" >/dev/null 2>&1 || miss="$miss $c"; done
+    [ -z "$miss" ] || { echo "${0##*/}: missing dependency:$miss" >&2; exit 127; }
+}
+
+need jq
+
 state="$HOME/.local/state/quickshell/wallpapers.json"
 mkdir -p "$(dirname "$state")"
 [ -f "$state" ] || echo '{}' > "$state"
@@ -11,10 +20,12 @@ apply() {
     local out="$1" path="$2"
     case "${path,,}" in
         *.mp4|*.mkv|*.webm|*.avi|*.mov)
+            need mpvpaper
             pkill -f "mpvpaper.* $out " 2>/dev/null || true
             mpvpaper -o "no-audio loop" "$out" "$path" &
             ;;
         *)
+            need awww
             awww img --outputs "$out" "$path"
             ;;
     esac

@@ -36,8 +36,6 @@
     obsidian       # notes
     anki           # flashcards
 
-    keepassxc      # passwords manager
-
     # Office Suite
     libreoffice
     hunspell

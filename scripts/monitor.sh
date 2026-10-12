@@ -2,6 +2,15 @@
 # dependencies: hyprland (hyprctl), jq
 set -euo pipefail
 
+# Fail loudly on a missing dependency rather than halfway through.
+need() {
+    local miss=
+    for c in "$@"; do command -v "$c" >/dev/null 2>&1 || miss="$miss $c"; done
+    [ -z "$miss" ] || { echo "${0##*/}: missing dependency:$miss" >&2; exit 127; }
+}
+
+need hyprctl jq awk
+
 toml="$HOME/.config/monitor.toml"
 
 focused() { hyprctl -j monitors | jq -r '.[] | select(.focused) | .name'; }

@@ -3,6 +3,15 @@
 # reading is DBus; pairing needs an agent, which is bt-agent's job
 set -euo pipefail
 
+# Fail loudly on a missing dependency rather than halfway through.
+need() {
+    local miss=
+    for c in "$@"; do command -v "$c" >/dev/null 2>&1 || miss="$miss $c"; done
+    [ -z "$miss" ] || { echo "${0##*/}: missing dependency:$miss" >&2; exit 127; }
+}
+
+need bluetoothctl
+
 case "${1:-}" in
     power)
         case "${2:-}" in

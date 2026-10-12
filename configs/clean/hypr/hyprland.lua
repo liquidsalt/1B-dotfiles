@@ -13,7 +13,6 @@ local discord      = "vesktop"
 local musicPlayer  = "spotify"
 local gameLauncher = "heroic"
 local steamLauncher = "steam"
-local passwords    = "keepassxc"
 
 local appLauncher      = "qs ipc call launcher toggle"
 local powerMenu        = "qs ipc call powerMenu toggle"
@@ -221,7 +220,6 @@ hl.bind(mod .. " + D",              hl.dsp.exec_cmd(discord))
 hl.bind(mod .. " + M",              hl.dsp.exec_cmd(musicPlayer))
 hl.bind(mod .. " + G",              hl.dsp.exec_cmd(gameLauncher))
 hl.bind(mod .. " + SHIFT + G",      hl.dsp.exec_cmd(steamLauncher))
-hl.bind(mod .. " + P",              hl.dsp.exec_cmd(passwords))
 hl.bind(mod .. " + W",              hl.dsp.exec_cmd(wallpaperManager))
 
 -- Binds: windows

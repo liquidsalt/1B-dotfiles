@@ -1,0 +1,7 @@
+# screenshots, not config
+.preview/
+
+.obsidian/
+
+# private planning notes, not config
+Plan.md

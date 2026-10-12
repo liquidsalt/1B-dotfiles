@@ -35,8 +35,6 @@
     "d /home/commander/projects/dev/ai-generated 0755 commander users -"
     "d /home/commander/projects/art 0755 commander users -"
 
-    "d /home/commander/passwords 0755 commander users -"
-
     "d /home/commander/.config/scripts 0755 commander users -"
   ];
 }
