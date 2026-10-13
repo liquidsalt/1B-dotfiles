@@ -8,6 +8,7 @@ user="commander"
 server="personal-server"
 disk="/dev/nvme0n1"
 checkout="projects/dev/1B-dotfiles"
+wallpapers="https://github.com/liquidsalt/wallpapers"
 mnt="/mnt"
 
 say() { printf '\n▸ %s\n' "$*"; }
@@ -97,6 +98,14 @@ clone="/home/$user/$checkout"
 git clone "$url" "$mnt$clone"
 nixos-enter --root "$mnt" -- env HOME="/home/$user" "$clone/scripts/deploy.sh"
 
+# Wallpapers are a separate public repo, kept out of the backup because they
+# are large and already versioned elsewhere.
+say "fetching wallpapers"
+git clone -q --depth 1 "$wallpapers" "$mnt/home/$user/media/wallpapers" ||
+    echo "  could not clone $wallpapers -- the picker will be empty"
+
 nixos-enter --root "$mnt" -- chown -R "$user:users" "/home/$user"
 
 say "done. reboot, and the tailnet node for this installer is already gone."
+echo "  then run:  ~/.config/scripts/first-run.sh"
+echo "  it joins the tailnet and logs in to github, which need a booted system."

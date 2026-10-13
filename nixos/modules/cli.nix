@@ -12,6 +12,8 @@
     p7zip
     unzip
     unrar
+    zstd
+    age       # backup.sh encrypts the snapshot with it
 
     # utilities
     fd
