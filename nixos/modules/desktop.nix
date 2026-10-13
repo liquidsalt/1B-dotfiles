@@ -54,7 +54,9 @@
   fonts.packages = with pkgs; [
     adwaita-fonts           # sans font
     literata                # serif font
-    ibm-plex                # mono font
+    (ibm-plex.override {    # mono font
+    	families = [ "mono" ];
+    })
 
     fira-mono               # code/terminal font
     alegreya                # reading font
