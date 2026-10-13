@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-# dependencies: coreutils, findutils, git (only for --pull)
+# Copy the configs and scripts into ~/.config from a fresh clone of the repo,
+# so it runs the same from anywhere, ~/.config/scripts included.
+# dependencies: coreutils, findutils, git (not for --local)
 set -euo pipefail
 
 # Fail loudly on a missing dependency rather than halfway through.
@@ -11,23 +13,29 @@ need() {
 
 need find install
 
-repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+url="${DEPLOY_REPO:-https://github.com/liquidsalt/1B-dotfiles}"
 config="${XDG_CONFIG_HOME:-$HOME/.config}"
 
-usage() { echo "usage: deploy.sh [--pull] [--dry-run]" >&2; exit 2; }
+usage() { echo "usage: deploy.sh [--local] [--dry-run]" >&2; exit 2; }
 
-pull=0; dry=0
+# --local deploys the checkout this script sits in, uncommitted edits and all.
+local_repo=0; dry=0
 for a in "$@"; do
     case "$a" in
-        --pull)    pull=1 ;;
+        --local)   local_repo=1 ;;
         --dry-run) dry=1 ;;
         *)         usage ;;
     esac
 done
 
-if [ "$pull" = 1 ]; then
-    command -v git >/dev/null 2>&1 || { echo "deploy.sh: --pull needs git" >&2; exit 127; }
-    git -C "$repo" pull --ff-only
+if [ "$local_repo" = 1 ]; then
+    repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+    [ -d "$repo/configs/clean" ] || { echo "deploy.sh: $repo is not a checkout" >&2; exit 1; }
+else
+    need git
+    repo=$(mktemp -d "${TMPDIR:-/tmp}/deploy.XXXXXX")
+    trap 'rm -rf "$repo"' EXIT
+    git clone -q --depth 1 "$url" "$repo"
 fi
 
 # Copy, never symlink: the machine keeps working with the repo deleted.
