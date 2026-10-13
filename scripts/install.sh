@@ -28,13 +28,36 @@ lsblk -dno NAME,MODEL,SIZE "$disk" || die "$disk not found"
 read -rp "  wipe this disk? everything on it is lost [type YES]: " ok
 [ "$ok" = YES ] || die "aborted"
 
-# Passwords, all three up front so the rest is unattended
+# Passwords, all three up front so the rest is unattended. Shown as you type:
+# this runs once, on a machine in front of you, and a typo in the backup
+# passphrase is not discovered until twenty minutes later.
 say "passwords"
-read -rsp "  user ($user): " userpw; echo
-read -rsp "  user, again: "        userpw2; echo
-[ "$userpw" = "$userpw2" ] || die "user passwords differ"
-read -rsp "  backup passphrase: " backuppw; echo
+read -rp "  user ($user): " userpw
+read -rp "  backup passphrase: " backuppw
+[ -n "$userpw" ] || die "empty user password"
+[ -n "$backuppw" ] || die "empty backup passphrase"
+echo
+echo "  check these before continuing:"
+echo "    user password:     $userpw"
+echo "    backup passphrase: $backuppw"
+read -rp "  both correct? [type YES]: " ok
+[ "$ok" = YES ] || die "aborted"
 echo "  the disk passphrase is asked for by cryptsetup, twice, next."
+
+# Everything past this point needs the network, and partitioning is the point
+# of no return -- so prove connectivity while the disk is still intact.
+say "network"
+online() { curl -fsS --max-time 8 -o /dev/null https://cache.nixos.org/nix-cache-info; }
+if ! online; then
+    echo "  not online yet, waiting 60s for NetworkManager..."
+    for _ in $(seq 1 12); do sleep 5; online && break; done
+fi
+if ! online; then
+    nmcli -t -f NAME,DEVICE connection show --active 2>/dev/null | sed 's/^/  active: /'
+    nmcli -t -f SSID,SIGNAL device wifi list 2>/dev/null | head -5 | sed 's/^/  seen: /'
+    die "no internet. connect with: nmtui   (then re-run install-1B -- the disk is untouched)"
+fi
+echo "  online"
 
 # Partition, format, mount. disko prompts for the FDE passphrase itself.
 say "partitioning"

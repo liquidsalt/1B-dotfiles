@@ -12,8 +12,12 @@
 
   boot.supportedFilesystems.zfs = false;   # ext4 only, and it shrinks the image
 
-  # Two supplicants fight over the radio, and wifi.nix brings NetworkManager.
-  networking.wireless.enable = lib.mkForce false;   # mkForce: CD sets it higher
+  # The CD runs wpa_supplicant standalone, with its own networks list. Hand the
+  # supplicant to NetworkManager instead of switching it off: NM drives the
+  # radio *through* wpa_supplicant, so disabling it leaves no wifi device at
+  # all -- profiles present, radio enabled, DEVICE column empty.
+  networking.wireless.userControlled.enable = lib.mkForce true;
+  networking.wireless.networks = lib.mkForce { };
 
   services.tailscale = {
     enable = true;
