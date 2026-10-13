@@ -1,4 +1,4 @@
-{ lib, modulesPath, pkgs, ... }:
+{ modulesPath, pkgs, ... }:
 {
   imports = [
     (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix")
@@ -12,12 +12,10 @@
 
   boot.supportedFilesystems.zfs = false;   # ext4 only, and it shrinks the image
 
-  # The CD runs wpa_supplicant standalone, with its own networks list. Hand the
-  # supplicant to NetworkManager instead of switching it off: NM drives the
-  # radio *through* wpa_supplicant, so disabling it leaves no wifi device at
-  # all -- profiles present, radio enabled, DEVICE column empty.
-  networking.wireless.userControlled.enable = lib.mkForce true;
-  networking.wireless.networks = lib.mkForce { };
+  # Nothing here touches networking.wireless on purpose. NetworkManager drives
+  # the radio *through* wpa_supplicant and enables it itself; switching it off
+  # leaves no wifi device at all -- profiles present, radio enabled, DEVICE
+  # column empty.
 
   services.tailscale = {
     enable = true;
