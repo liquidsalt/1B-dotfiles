@@ -119,7 +119,7 @@ case "$repo" in
 esac
 clone="/home/$user/$checkout"
 git clone "$url" "$mnt$clone"
-nixos-enter --root "$mnt" -- env HOME="/home/$user" "$clone/scripts/deploy.sh"
+nixos-enter --root "$mnt" -- env HOME="/home/$user" "$clone/scripts/deploy.sh" --local
 
 # Wallpapers are a separate public repo, kept out of the backup because they
 # are large and already versioned elsewhere.
