@@ -18,6 +18,8 @@
       ];
     })
 
+    helium         # web browser
+
     kitty          # terminal emulator
     nautilus       # file manager
     loupe          # image viewer
