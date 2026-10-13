@@ -23,6 +23,7 @@
 
   # Shell
   programs.fish.enable = true;
+  programs.fish.interactiveShellInit = "set -g fish_greeting";  # no welcome banner
 
   # Shell Prompt
   programs.starship.enable = true;
