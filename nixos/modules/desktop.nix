@@ -25,6 +25,7 @@
     partOf      = [ "graphical-session.target" ];
     after       = [ "graphical-session.target" ];
     wantedBy    = [ "graphical-session.target" ];
+    path        = [ "/run/current-system/sw" ];   # scripts need bash, nmcli, hyprctl, ...
     serviceConfig = {
       ExecStart  = "${pkgs.quickshell}/bin/quickshell";
       Restart    = "on-failure";
