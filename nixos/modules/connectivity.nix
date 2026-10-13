@@ -6,6 +6,7 @@
   users.users.commander.extraGroups = [ "networkmanager" ];
 
   networking.networkmanager.enable = true;
+  hardware.enableRedistributableFirmware = true;
 
   # Firewall
   networking.firewall = {
