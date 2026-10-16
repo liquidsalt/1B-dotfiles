@@ -26,14 +26,9 @@
     # extraUpFlags would be dead here: it only feeds tailscaled-autoconnect,
     # which does not exist without an authKeyFile. `set` runs regardless.
     extraSetFlags = [
-      "--accept-dns=false"      # their resolver answers nothing for public names
+      "--accept-dns=true"      # their resolver answers nothing for public names
       "--operator=commander"    # so taildrop works without root
     ];
-  };
-
-  # Tailnet peers. MagicDNS is off fleet-wide, so the names live here instead.
-  networking.hosts = {
-    "100.106.193.35" = [ "personal-server" ];
   };
 
   # Nautilus renders subdirectories of its scripts dir as submenus, so one thin
