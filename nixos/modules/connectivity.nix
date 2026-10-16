@@ -1,12 +1,13 @@
 { pkgs, ... }:
 {
+  # Nessessary Firmware for Netwerking
+  hardware.enableRedistributableFirmware = true;
 
   # Network Manager
   networking.hostName = "1B";
   users.users.commander.extraGroups = [ "networkmanager" ];
 
   networking.networkmanager.enable = true;
-  hardware.enableRedistributableFirmware = true;
 
   # Firewall
   networking.firewall = {
@@ -23,12 +24,22 @@
   # Tailscale
   services.tailscale = {
     enable = true;
-    # extraUpFlags would be dead here: it only feeds tailscaled-autoconnect,
-    # which does not exist without an authKeyFile. `set` runs regardless.
     extraSetFlags = [
-      "--accept-dns=true"      # their resolver answers nothing for public names
-      "--operator=commander"    # so taildrop works without root
+      "--accept-dns=true"    # use MagicDNS for tailnet names
+      "--operator=commander" # so taildrop works without root
     ];
+  };
+  services.resolved.enable = true; # Tailscale handle tailnet names while normal sites use the wifi DNS
+
+  # Taildrop
+  systemd.user.services.taildrop = {
+    description = "Receive Taildrop files into ~/downloads";
+    wantedBy    = [ "default.target" ];
+    serviceConfig = {
+      ExecStart  = "${pkgs.tailscale}/bin/tailscale file get --loop --conflict=rename %h/downloads";
+      Restart    = "always";
+      RestartSec = 10;
+    };
   };
 
   # Nautilus renders subdirectories of its scripts dir as submenus, so one thin
@@ -37,7 +48,6 @@
   systemd.user.services.taildrop-menu = {
     description = "Build the Nautilus \"Send to\" submenu from the tailnet";
     wantedBy    = [ "default.target" ];
-    after       = [ "network-online.target" ];
     serviceConfig = {
       Type            = "oneshot";
       RemainAfterExit = true;
@@ -62,18 +72,6 @@
             mv "$tmp" "$dir"
         fi
       '';
-    };
-  };
-
-  # Taildrop: files sent from the phone land in ~/downloads with nothing to do.
-  systemd.user.services.taildrop = {
-    description = "Receive Taildrop files into ~/downloads";
-    wantedBy    = [ "default.target" ];
-    after       = [ "network-online.target" ];
-    serviceConfig = {
-      ExecStart  = "${pkgs.tailscale}/bin/tailscale file get --loop --conflict=rename %h/downloads";
-      Restart    = "always";
-      RestartSec = 10;
     };
   };
 
