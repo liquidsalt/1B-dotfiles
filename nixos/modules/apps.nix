@@ -23,6 +23,7 @@
     kitty          # terminal emulator
     nautilus       # file manager
     loupe          # image viewer
+    drawing        # test image viewer
     celluloid      # video viewer
 
     awww           # still wallpaper manager
