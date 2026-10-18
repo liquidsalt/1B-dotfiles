@@ -22,14 +22,15 @@
     obsidian       # notes
     anki           # flashcards
 
-    prism          # prismlauncher
-    # Heroic
+    # heroic game launcher
     (heroic.override {
       extraPkgs = pkgs': [
         pkgs'.gamemode
         pkgs'.gamescope
       ];
     })
+
+    prismlauncher  # minecraft launcher
 
     # Office Suite
     libreoffice
