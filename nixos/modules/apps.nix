@@ -1,23 +1,6 @@
 { pkgs, ... }:
 {
-  # Gaming
-  programs.gamemode.enable  = true;
-  programs.gamescope.enable = true;
-
-  programs.steam = {
-    enable = true;
-    gamescopeSession.enable = true;
-  };
-
   environment.systemPackages = with pkgs; [
-    # Heroic
-    (heroic.override {
-      extraPkgs = pkgs': [
-        pkgs'.gamemode
-        pkgs'.gamescope
-      ];
-    })
-
     helium         # web browser
 
     kitty          # terminal emulator
@@ -39,6 +22,15 @@
     obsidian       # notes
     anki           # flashcards
 
+    prism          # prismlauncher
+    # Heroic
+    (heroic.override {
+      extraPkgs = pkgs': [
+        pkgs'.gamemode
+        pkgs'.gamescope
+      ];
+    })
+
     # Office Suite
     libreoffice
     hunspell
@@ -46,5 +38,12 @@
     hunspellDicts.fr-moderne
   ];
 
-  # 
+  # Gaming
+  programs.gamemode.enable  = true;
+  programs.gamescope.enable = true;
+
+  programs.steam = {
+    enable = true;
+    gamescopeSession.enable = true;
+  };
 }
