@@ -79,12 +79,19 @@
   hardware.logitech.wireless.enable          = true;
   hardware.logitech.wireless.enableGraphical = true;
 
-  # hidraw is root-only; uaccess gives the seat an ACL so headset.py can read
+  # hidraw is root-only; uaccess gives the seat an ACL so headset script can read
   # the Nari's charge without sudo. No upstream tool supports this model.
-  services.udev.extraRules = ''
-    SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1532", ATTRS{idProduct}=="051e", TAG+="uaccess"
-    SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1532", ATTRS{idProduct}=="051f", TAG+="uaccess"
-  '';
+  # Not extraRules: that becomes 99-local.rules, too late for uaccess.
+  services.udev.packages = [
+    (pkgs.writeTextFile {
+      name = "70-nari-essential.rules";
+      destination = "/lib/udev/rules.d/70-nari-essential.rules";
+      text = ''
+        SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1532", ATTRS{idProduct}=="051e", TAG+="uaccess"
+        SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1532", ATTRS{idProduct}=="051f", TAG+="uaccess"
+      '';
+    })
+  ];
 
   # Firmware updates
   services.fwupd.enable = true;
