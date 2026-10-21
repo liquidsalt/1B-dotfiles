@@ -3,10 +3,11 @@
   # Nessessary Firmware for Netwerking
   hardware.enableRedistributableFirmware = true;
 
-  # Network Manager
+  # Host Name
   networking.hostName = "1B";
-  users.users.commander.extraGroups = [ "networkmanager" ];
 
+  # Network Manager
+  users.users.commander.extraGroups = [ "networkmanager" ];
   networking.networkmanager.enable = true;
 
   # Firewall
