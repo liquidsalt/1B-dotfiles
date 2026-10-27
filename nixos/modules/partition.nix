@@ -24,8 +24,9 @@
           size     = "800G";
           content = {
             type                   = "luks";
-            name                   = "cryptroot";   # no passwordFile, so it prompts
-            settings.allowDiscards = true;           # SSD
+            name                   = "cryptroot"; # no passwordFile, so it prompts
+            settings.allowDiscards = true;        # SSD
+            settings.crypttabExtraOpts = [ "password-echo=yes" ];
             content = {
               type       = "filesystem";
               format     = "ext4";
