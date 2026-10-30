@@ -33,7 +33,16 @@
     prismlauncher  # minecraft launcher
 
     # Office Suite
-    libreoffice
+    (symlinkJoin {               # libreoffice ignores the dconf theme, force dark gtk
+      name               = "libreoffice";
+      paths              = [ libreoffice ];
+      nativeBuildInputs  = [ makeWrapper ];
+      postBuild          = ''
+        for bin in $out/bin/*; do
+          wrapProgram "$bin" --set GTK_THEME Adwaita:dark
+        done
+      '';
+    })
     hunspell
     hunspellDicts.en-us
     hunspellDicts.fr-moderne
